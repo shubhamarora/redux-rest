@@ -4,6 +4,8 @@
 // TODO make ajax library pluggable
 import agent from 'superagent';
 import itemStatus from './itemStatus';
+import 'core-js/fn/array/find-index';
+import 'core-js/fn/array/find';
 
 export { itemStatus };
 
@@ -219,6 +221,21 @@ export class ItemReducer extends BaseReducer {
       // TODO shouldn't hardcode 'id' field
       return this._replaceItem(state, 'id', item.id, item);
 
+    } else if (action.type === this.actionTypes.retrieve) {
+      item = {...action.payload, status: itemStatus.pending};
+      // TODO shouldn't hardcode 'id' field
+      return this._replaceItem(state, 'id', item.id, item);
+
+    } else if (action.type === this.actionTypes.retrieve_success) {
+      item = {...action.payload, status: itemStatus.saved};
+      // TODO shouldn't hardcode 'id' field
+      return this._replaceItem(state, 'id', item.id, item);
+
+    } else if (action.type === this.actionTypes.retrieve_failure) {
+      item = {...action.payload, status: itemStatus.failed};
+      // TODO shouldn't hardcode 'id' field
+      return this._replaceItem(state, 'id', item.id, item);
+
     } else if (action.type === this.actionTypes.list_success) {
       if (Array.isArray(action.payload)){
         return [...action.payload];  
@@ -254,7 +271,7 @@ export class CollectionReducer extends BaseReducer {
   }
 }
 
-export default class Flux {
+export default class API {
   constructor(APIConf, CSRFOptions) {
     this.API = {};
     this.actionTypes = {};
