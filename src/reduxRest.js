@@ -182,9 +182,16 @@ class BaseReducer {
   }
 
   _replaceItem(state, key, value, newItem) {
-    let index = state.findIndex(item => item[key] === value);
-    let newState = [...state];
-    newState.splice(index, 1, newItem);
+    let newState = null
+    if(Array.isArray(state)){
+      let index = state.findIndex(item => item[key] === value);
+      newState = [...state];
+      newState.splice(index, 1, newItem);  
+    } else {
+      let index = state.results.findIndex(item => item[key] === value);
+      newState = {...state};
+      newState.results.splice(index, 1, newItem);  
+    }
     return newState;
   }
 }
