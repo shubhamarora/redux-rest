@@ -119,7 +119,7 @@ export class ActionTypes {
 export class ActionCreators {
   constructor(endpointName, API, actionTypes) {
     this.actionTypes = actionTypes;
-    this._pendingID = 0;
+    this._pendingID = new Date().getTime();
     ['list', 'retrieve', 'create', 'update'].forEach(action => {
       this[action] = this._createAction.bind(this, action, API[action].bind(API));
     });
