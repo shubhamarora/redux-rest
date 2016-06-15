@@ -42,8 +42,8 @@ export class Endpoint {
     return this._prepareRequest(agent.post(this.url)).send(conf);
   }
 
-  update(conf, id) {
-    return this._prepareRequest(agent.put(this._getObjectURL(id))).send(conf);
+  update(conf, id, method='put') {
+    return this._prepareRequest(agent[method](this._getObjectURL(id))).send(conf);
   }
 
   _prepareRequest(request) {
@@ -125,10 +125,10 @@ export class ActionCreators {
     });
   }
 
-  _createAction(action, apiRequest, payload, objectID) {
+  _createAction(action, apiRequest, payload, objectID, method) {
     return (dispatch) => {
       let pendingID = this._getPendingID();
-      let call = apiRequest(payload, objectID)
+      let call = apiRequest(payload, objectID, method)
           .end((err, res) => {
             if (err) {
               dispatch(this._failure(action, 'error', pendingID));
