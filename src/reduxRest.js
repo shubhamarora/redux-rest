@@ -30,27 +30,28 @@ export class Endpoint {
     this.url = url;
   }
 
-  list(params) {
-    return this._prepareRequest(agent.get(this.url)).query(params);
+  list(params, headers = {}) {
+    return this._prepareRequest(agent.get(this.url), headers).query(params);
   }
 
-  retrieve(id) {
-    return this._prepareRequest(agent.get(this._getObjectURL(id)));
+  retrieve(id, headers = {}) {
+    return this._prepareRequest(agent.get(this._getObjectURL(id)), headers);
   }
 
-  create(conf) {
-    return this._prepareRequest(agent.post(this.url)).send(conf);
+  create(conf, headers = {}) {
+    return this._prepareRequest(agent.post(this.url), headers).send(conf);
   }
 
-  update(conf, id, method='put') {
-    return this._prepareRequest(agent[method](this._getObjectURL(id))).send(conf);
+  update(conf, id, method='put', headers = {}) {
+    return this._prepareRequest(agent[method](this._getObjectURL(id)), headers).send(conf);
   }
 
-  _prepareRequest(request) {
+  _prepareRequest(request, headers) {
     if (this.setHeaders) {
       request = this.setHeaders(request);
     }
     request = this._setCSRFHeader(request);
+    request.header = Object.assign(request.header, headers);
     return request;
   }
   
